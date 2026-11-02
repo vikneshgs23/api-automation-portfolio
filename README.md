@@ -1,18 +1,24 @@
 # API Automation & Testing Portfolio
 
-A collection of API test automation suites, exploratory collections, and contract validation workflows built using Postman and Newman.
+API testing projects covering test design, manual/exploratory testing in Postman, command-line runs with Newman, and Java-based automation with REST Assured.
 
 ---
 
 ## 📌 Overview
 
-This repository houses end-to-end API testing collections designed to validate RESTful APIs for functionality, data integrity, and workflow state handling. 
+End-to-end API testing of RESTful services, validating functionality, data integrity and workflow state handling.
 
-The collections focus on:
-- End-to-end CRUD lifecycles.
-- Dynamic request chaining (token extraction, dynamic ID injection).
-- Response validation and JSON schema assertions.
-- Command-line test execution and reporting via Newman.
+- Test cases designed per endpoint (positive, negative, auth, end-to-end)
+- CRUD lifecycles with dynamic request chaining (token extraction, ID injection)
+- Response and JSON schema assertions
+- CLI execution and HTML reporting via Newman
+- Java automation framework with REST Assured and TestNG *(in progress)*
+
+---
+
+## 🧰 Tech Stack
+
+Postman, Newman, Java, REST Assured, TestNG, Maven
 
 ---
 
@@ -20,43 +26,55 @@ The collections focus on:
 
 ```text
 api-automation-portfolio/
-├── collections/             # Exported Postman collection JSON files
-├── environments/            # Postman environment variable files
-├── reports/                 # Test execution reports (Newman CLI/HTML)
+├── postman/
+│   ├── collections/      # Exported Postman collections
+│   ├── environments/     # Environment variable files
+│   └── reports/          # Newman HTML/CLI reports
+├── rest-assured/         # Java + REST Assured + TestNG framework
+├── test-cases/           # API test case documentation
 └── README.md
-🛠 Prerequisites
-To run these tests locally or headlessly via the command line, install:
+```
 
-Postman App
+---
 
-Node.js (v16+)
+## 🔬 Projects
 
-Newman (Postman CLI Runner):
+| API under test | Postman | REST Assured |
+|---|---|---|
+| Restful-Booker | ✅ Collection + Newman reports | 🚧 In progress |
 
-Bash
-npm install -g newman
-npm install -g newman-reporter-htmlextra
+---
 
-⚙️ How to Run
-Option 1: Import into Postman App
-Clone this repository:
+## ⚙️ How to Run
 
-Bash
-git clone [https://github.com/](https://github.com/)<your-username>/<your-repo-name>.git
-Open Postman.
+### Postman (app)
+1. Clone the repo: `git clone https://github.com/vikneshgs23/<repo-name>.git`
+2. In Postman, click **Import** and select the file from `postman/collections/`
+3. Import the matching environment from `postman/environments/`
+4. Run it with the Collection Runner
 
-Click Import in the top-left corner.
+### Newman (CLI)
+```bash
+npm install -g newman newman-reporter-htmlextra
 
-Drag and drop the target .json file from the /collections directory.
-
-Select the collection and run it via Collection Runner.
-
-Option 2: Run via CLI (Newman)
-Bash
-newman run collections/<collection-name>.json \
-  -e environments/<environment-name>.json \
+newman run postman/collections/<collection-name>.json \
+  -e postman/environments/<environment-name>.json \
   -r cli,htmlextra \
-  --reporter-htmlextra-export reports/report.html
+  --reporter-htmlextra-export postman/reports/report.html
+```
+
+### REST Assured *(in progress)*
+```bash
+cd rest-assured
+mvn clean test
+```
+
+---
+
+## 🔎 Key Findings
+*(Add API quirks or bugs you discover, e.g. unexpected status codes.)*
+
+---
 
 ## 👤 Author
 
