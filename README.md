@@ -9,10 +9,10 @@ API testing projects covering test design, manual/exploratory testing in Postman
 End-to-end API testing of RESTful services, validating functionality, data integrity and workflow state handling.
 
 - Test cases designed per endpoint (positive, negative, auth, end-to-end)
-- CRUD lifecycles with dynamic request chaining (token extraction, ID injection)
-- Response and JSON schema assertions
-- CLI execution and HTML reporting via Newman
-- Java automation framework with REST Assured and TestNG *(in progress)*
+- Postman collection with test scripts and environment variables
+- CRUD lifecycles with dynamic request chaining (token extraction, ID injection) *(in progress)*
+- CLI execution and HTML reporting via Newman *(planned)*
+- Java automation framework with REST Assured and TestNG *(planned)*
 
 ---
 
@@ -26,12 +26,9 @@ Postman, Newman, Java, REST Assured, TestNG, Maven
 
 ```text
 api-automation-portfolio/
-├── postman/
-│   ├── collections/      # Exported Postman collections
-│   ├── environments/     # Environment variable files
-│   └── reports/          # Newman HTML/CLI reports
-├── rest-assured/         # Java + REST Assured + TestNG framework
-├── test-cases/           # API test case documentation
+├── postman/              # Exported Postman collection and environment
+├── test-cases/           # API test case sheet with execution results
+├── rest-assured/         # Java + REST Assured + TestNG framework (coming soon)
 └── README.md
 ```
 
@@ -39,31 +36,36 @@ api-automation-portfolio/
 
 ## 🔬 Projects
 
-| API under test | Postman | REST Assured |
-|---|---|---|
-| Restful-Booker | ✅ Collection + Newman reports | 🚧 In progress |
+### Restful-Booker API (8 endpoints)
+
+| Area | Status |
+|---|---|
+| Test case design | ✅ 34 test cases written |
+| Postman execution | 🚧 7 of 34 executed (Ping, Auth) |
+| Newman CLI reports | ⏳ Planned |
+| REST Assured automation | ⏳ Planned |
 
 ---
 
 ## ⚙️ How to Run
 
 ### Postman (app)
-1. Clone the repo: `git clone https://github.com/vikneshgs23/<repo-name>.git`
-2. In Postman, click **Import** and select the file from `postman/collections/`
-3. Import the matching environment from `postman/environments/`
-4. Run it with the Collection Runner
+1. Clone the repo: `git clone https://github.com/vikneshgs23/api-automation-portfolio.git`
+2. In Postman, click **Import** and select `postman/Restful-Booker API.postman_collection.json`
+3. Import `postman/Restful-Booker.postman_environment.json`
+4. Select the **Restful-Booker** environment and run the requests or the Collection Runner
+5. Run `CreateToken` first, because it saves the auth token used by later requests
 
-### Newman (CLI)
+### Newman (CLI) *(planned)*
 ```bash
 npm install -g newman newman-reporter-htmlextra
 
-newman run postman/collections/<collection-name>.json \
-  -e postman/environments/<environment-name>.json \
-  -r cli,htmlextra \
-  --reporter-htmlextra-export postman/reports/report.html
+newman run "postman/Restful-Booker API.postman_collection.json" \
+  -e postman/Restful-Booker.postman_environment.json \
+  -r cli,htmlextra
 ```
 
-### REST Assured *(in progress)*
+### REST Assured *(planned)*
 ```bash
 cd rest-assured
 mvn clean test
@@ -72,7 +74,9 @@ mvn clean test
 ---
 
 ## 🔎 Key Findings
-*(Add API quirks or bugs you discover, e.g. unexpected status codes.)*
+
+- `GET /ping` returns **201 Created** instead of 200.
+- A failed login (wrong password, wrong username, empty body) returns **200** with `"reason": "Bad credentials"` instead of a 401 status.
 
 ---
 
