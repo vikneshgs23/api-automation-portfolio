@@ -242,6 +242,142 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "GetBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"All expected fields are present\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json).to.have.property(\"firstname\");\r\n    pm.expect(json).to.have.property(\"lastname\");\r\n    pm.expect(json).to.have.property(\"totalprice\");\r\n    pm.expect(json).to.have.property(\"depositpaid\");\r\n    pm.expect(json).to.have.property(\"bookingdates\");\r\n    pm.expect(json.bookingdates).to.have.property(\"checkin\");\r\n    pm.expect(json.bookingdates).to.have.property(\"checkout\");\r\n    pm.expect(json).to.have.property(\"additionalneeds\");\r\n});\r\n\r\npm.test(\"Returned booking is the one we created\", function () {\r\n    pm.expect(pm.response.json().firstname).to.eql(\"Viknesh\");\r\n    pm.expect(pm.response.json().lastname).to.eql(\"Tester\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetBooking_NonExistentId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Body is 'Not Found'\", function () {\r\n    pm.expect(pm.response.text()).to.eql(\"Not Found\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/99999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "99999999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetBooking_InvalidId",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Body is 'Not Found'\", function () {\r\n    pm.expect(pm.response.text()).to.eql(\"Not Found\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetBooking_DataTypes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Field data types are correct\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.firstname).to.be.a(\"string\");\r\n    pm.expect(json.lastname).to.be.a(\"string\");\r\n    pm.expect(json.totalprice).to.be.a(\"number\");\r\n    pm.expect(json.depositpaid).to.be.a(\"boolean\");\r\n    pm.expect(json.bookingdates).to.be.an(\"object\");\r\n    pm.expect(json.bookingdates.checkin).to.be.a(\"string\");\r\n    pm.expect(json.bookingdates.checkout).to.be.a(\"string\");\r\n    pm.expect(json.additionalneeds).to.be.a(\"string\");\r\n});\r\n\r\npm.test(\"Dates are in YYYY-MM-DD format\", function () {\r\n    const dateFormat = /^\\d{4}-\\d{2}-\\d{2}$/;\r\n    const dates = pm.response.json().bookingdates;\r\n    pm.expect(dates.checkin).to.match(dateFormat);\r\n    pm.expect(dates.checkout).to.match(dateFormat);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
