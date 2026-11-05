@@ -41,7 +41,7 @@ api-automation-portfolio/
 | Area | Status |
 |---|---|
 | Test case design | ✅ 34 test cases written |
-| Postman execution | 🚧 15 of 34 executed (Ping, Auth, Booking read and create) |
+| Postman execution | 🚧 21 of 34 executed (Ping, Auth, Booking read and create) |
 | Newman CLI reports | ⏳ Planned |
 | REST Assured automation | ⏳ Planned |
 
@@ -78,6 +78,8 @@ mvn clean test
 - `GET /ping` returns **201 Created** instead of 200.
 - A failed login (wrong password, wrong username, empty body) returns **200** with `"reason": "Bad credentials"` instead of a 401 status.
 - Restful-Booker is a shared public API and its data is wiped periodically, so a previously created booking can disappear. Tests should create their own data instead of relying on existing bookings.
+- `POST /booking` accepts a non-numeric `totalprice` (e.g. `"abc"`), creates the booking and silently stores the price as `null` instead of returning a validation error.
+- `POST /booking` accepts a booking whose checkout date is earlier than its checkin date, with no date validation.
 
 ---
 
