@@ -80,6 +80,7 @@ mvn clean test
 - Restful-Booker is a shared public API and its data is wiped periodically, so a previously created booking can disappear. Tests should create their own data instead of relying on existing bookings.
 - `POST /booking` accepts a non-numeric `totalprice` (e.g. `"abc"`), creates the booking and silently stores the price as `null` instead of returning a validation error.
 - `POST /booking` accepts a booking whose checkout date is earlier than its checkin date, with no date validation.
+- `PUT /booking/{id}` on a non-existent ID returns **405 Method Not Allowed** instead of 404.
 
 ---
 
