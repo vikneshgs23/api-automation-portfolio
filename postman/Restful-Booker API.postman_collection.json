@@ -1368,6 +1368,346 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "E2E_Lifecycle",
+      "item": [
+        {
+          "name": "E2E_1_CreateBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"bookingid is returned\", function () {\r\n    pm.expect(pm.response.json().bookingid).to.be.a(\"number\");\r\n});\r\n\r\npm.environment.set(\"e2eBookingId\", pm.response.json().bookingid);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"E2E\",\r\n    \"lastname\": \"Flow\",\r\n    \"totalprice\": 100,\r\n    \"depositpaid\": true,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2026-06-01\",\r\n        \"checkout\": \"2026-06-05\"\r\n    },\r\n    \"additionalneeds\": \"Breakfast\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "E2E_2_GetBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Booking data matches what was created\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.firstname).to.eql(\"E2E\");\r\n    pm.expect(json.lastname).to.eql(\"Flow\");\r\n    pm.expect(json.totalprice).to.eql(100);\r\n    pm.expect(json.depositpaid).to.eql(true);\r\n    pm.expect(json.bookingdates.checkin).to.eql(\"2026-06-01\");\r\n    pm.expect(json.bookingdates.checkout).to.eql(\"2026-06-05\");\r\n    pm.expect(json.additionalneeds).to.eql(\"Breakfast\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{e2eBookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{e2eBookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "E2E_3_UpdateBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"All fields are updated\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.firstname).to.eql(\"E2EUpdated\");\r\n    pm.expect(json.lastname).to.eql(\"FlowUpdated\");\r\n    pm.expect(json.totalprice).to.eql(200);\r\n    pm.expect(json.depositpaid).to.eql(false);\r\n    pm.expect(json.bookingdates.checkin).to.eql(\"2026-07-01\");\r\n    pm.expect(json.bookingdates.checkout).to.eql(\"2026-07-05\");\r\n    pm.expect(json.additionalneeds).to.eql(\"Lunch\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"E2EUpdated\",\r\n    \"lastname\": \"FlowUpdated\",\r\n    \"totalprice\": 200,\r\n    \"depositpaid\": false,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2026-07-01\",\r\n        \"checkout\": \"2026-07-05\"\r\n    },\r\n    \"additionalneeds\": \"Lunch\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{e2eBookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{e2eBookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "E2E_4_PartialUpdateBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Firstname is patched, other fields keep the update\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.firstname).to.eql(\"E2EPatched\");\r\n    pm.expect(json.lastname).to.eql(\"FlowUpdated\");\r\n    pm.expect(json.totalprice).to.eql(200);\r\n    pm.expect(json.additionalneeds).to.eql(\"Lunch\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"E2EPatched\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{e2eBookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{e2eBookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "E2E_5_DeleteBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{e2eBookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{e2eBookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "E2E_6_VerifyDeleted",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{e2eBookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{e2eBookingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Data_Integrity",
+      "item": [
+        {
+          "name": "TC34_1_CreateBooking",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"bookingid is returned\", function () {\r\n    pm.expect(pm.response.json().bookingid).to.be.a(\"number\");\r\n});\r\n\r\n// Save the new ID and the exact data we sent, for the next request\r\npm.environment.set(\"tc34BookingId\", pm.response.json().bookingid);\r\npm.environment.set(\"tc34Payload\", pm.request.body.raw);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"Integrity\",\r\n    \"lastname\": \"Check\",\r\n    \"totalprice\": 750,\r\n    \"depositpaid\": false,\r\n    \"bookingdates\": {\r\n        \"checkin\": \"2026-08-10\",\r\n        \"checkout\": \"2026-08-15\"\r\n    },\r\n    \"additionalneeds\": \"Late checkout\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TC34_2_GetAndCompare",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Retrieved data matches the data that was sent\", function () {\r\n    const sent = JSON.parse(pm.environment.get(\"tc34Payload\"));\r\n    const got = pm.response.json();\r\n    pm.expect(got).to.eql(sent);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{tc34BookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{tc34BookingId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
