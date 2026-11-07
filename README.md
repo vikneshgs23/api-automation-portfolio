@@ -10,8 +10,8 @@ End-to-end API testing of RESTful services, validating functionality, data integ
 
 - Test cases designed per endpoint (positive, negative, auth, end-to-end)
 - Postman collection with test scripts and environment variables
-- CRUD lifecycles with dynamic request chaining (token extraction, ID injection) *(in progress)*
-- CLI execution and HTML reporting via Newman *(planned)*
+- CRUD lifecycles with dynamic request chaining (token extraction, ID injection)
+- CLI execution and HTML reporting via Newman
 - Java automation framework with REST Assured and TestNG *(planned)*
 
 ---
@@ -60,14 +60,13 @@ api-automation-portfolio/
 ```bash
 npm install -g newman newman-reporter-htmlextra
 
-newman run "postman/Restful-Booker API.postman_collection.json" \
-  -e postman/Restful-Booker.postman_environment.json \
-  -r "cli,htmlextra" \
-  --reporter-htmlextra-export postman/reports/report.html
+newman run "postman/Restful-Booker API.postman_collection.json" -e "postman/Restful-Booker.postman_environment.json" -r "cli,htmlextra" --reporter-htmlextra-export "postman/reports/report.html" --reporter-htmlextra-skipSensitiveData
 ```
 The HTML report is saved to `postman/reports/report.html`. On Windows PowerShell, put the whole command on one line.
 
 Two assertions fail on purpose: they document real API defects (see Key Findings).
+
+📊 [View the latest Newman report](https://vikneshgs23.github.io/api-automation-portfolio/postman/reports/report.html)
 
 ### REST Assured *(planned)*
 ```bash
