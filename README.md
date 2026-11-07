@@ -42,7 +42,7 @@ api-automation-portfolio/
 |---|---|
 | Test case design | ✅ 34 test cases written |
 | Postman execution | ✅ 34 of 34 executed (2 defects found) |
-| Newman CLI reports | ⏳ Planned |
+| Newman CLI reports | ✅ 41 requests, 87 assertions, 2 failing (documented defects) |
 | REST Assured automation | ⏳ Planned |
 
 ---
@@ -56,14 +56,18 @@ api-automation-portfolio/
 4. Select the **Restful-Booker** environment and run the requests or the Collection Runner
 5. Run `CreateToken` first, because it saves the auth token used by later requests
 
-### Newman (CLI) *(planned)*
+### Newman (CLI)
 ```bash
 npm install -g newman newman-reporter-htmlextra
 
 newman run "postman/Restful-Booker API.postman_collection.json" \
   -e postman/Restful-Booker.postman_environment.json \
-  -r cli,htmlextra
+  -r "cli,htmlextra" \
+  --reporter-htmlextra-export postman/reports/report.html
 ```
+The HTML report is saved to `postman/reports/report.html`. On Windows PowerShell, put the whole command on one line.
+
+Two assertions fail on purpose: they document real API defects (see Key Findings).
 
 ### REST Assured *(planned)*
 ```bash
@@ -81,6 +85,7 @@ mvn clean test
 - `PUT` and `DELETE` on a non-existent ID return **405 Method Not Allowed** instead of 404.
 - A successful `DELETE` returns **201 Created** instead of 200 or 204.
 - Restful-Booker is a shared public API and its data is wiped periodically, so tests should create their own data instead of relying on existing bookings.
+- Requests depend on shared state (token, booking ID). In the collection, Auth runs first and a fresh booking is created before the PATCH group, so a Newman run starts from known data.
 
 ---
 
