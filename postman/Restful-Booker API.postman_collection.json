@@ -905,6 +905,155 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "PartialUpdateBooking_Firstname",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Firstname is updated\", function () {\r\n    pm.expect(pm.response.json().firstname).to.eql(\"Sam\");\r\n});\r\n\r\npm.test(\"Other fields are unchanged\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.lastname).to.eql(\"Tester\");\r\n    pm.expect(json.totalprice).to.eql(111);\r\n    pm.expect(json.depositpaid).to.eql(true);\r\n    pm.expect(json.bookingdates.checkin).to.eql(\"2026-01-01\");\r\n    pm.expect(json.bookingdates.checkout).to.eql(\"2026-01-05\");\r\n    pm.expect(json.additionalneeds).to.eql(\"Breakfast\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"Sam\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PartialUpdateBooking_FirstAndLastName",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Firstname and lastname are updated\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.firstname).to.eql(\"Sam\");\r\n    pm.expect(json.lastname).to.eql(\"Lee\");\r\n});\r\n\r\npm.test(\"Other fields are unchanged\", function () {\r\n    const json = pm.response.json();\r\n    pm.expect(json.totalprice).to.eql(111);\r\n    pm.expect(json.depositpaid).to.eql(true);\r\n    pm.expect(json.bookingdates.checkin).to.eql(\"2026-01-01\");\r\n    pm.expect(json.bookingdates.checkout).to.eql(\"2026-01-05\");\r\n    pm.expect(json.additionalneeds).to.eql(\"Breakfast\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"Sam\",\r\n    \"lastname\": \"Lee\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PartialUpdateBooking_NoToken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 403\", function () {\r\n    pm.response.to.have.status(403);\r\n});\r\n\r\npm.test(\"Body is 'Forbidden'\", function () {\r\n    pm.expect(pm.response.text()).to.eql(\"Forbidden\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"firstname\": \"NoToken\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/booking/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "booking",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
