@@ -2,6 +2,8 @@
 
 API testing projects covering test design, manual/exploratory testing in Postman, command-line runs with Newman, and Java-based automation with REST Assured.
 
+[![API tests and reports](https://github.com/vikneshgs23/api-automation-portfolio/actions/workflows/api-tests.yml/badge.svg)](https://github.com/vikneshgs23/api-automation-portfolio/actions/workflows/api-tests.yml)
+
 ---
 
 ## 📌 Overview
@@ -12,7 +14,8 @@ End-to-end API testing of RESTful services, validating functionality, data integ
 - Postman collection with test scripts and environment variables
 - CRUD lifecycles with dynamic request chaining (token extraction, ID injection)
 - CLI execution and HTML reporting via Newman
-- Java automation framework with REST Assured and TestNG *(planned)*
+- Java automation framework with REST Assured and TestNG *(in progress)*
+- GitHub Actions runs the tests on every push and publishes HTML reports
 
 ---
 
@@ -28,7 +31,8 @@ Postman, Newman, Java, REST Assured, TestNG, Maven
 api-automation-portfolio/
 ├── postman/              # Exported Postman collection and environment
 ├── test-cases/           # API test case sheet with execution results
-├── rest-assured/         # Java + REST Assured + TestNG framework (coming soon)
+├── rest-assured/         # Java + REST Assured + TestNG framework
+├── .github/workflows/   # CI: runs the tests and publishes reports
 └── README.md
 ```
 
@@ -43,7 +47,8 @@ api-automation-portfolio/
 | Test case design | ✅ 34 test cases written |
 | Postman execution | ✅ 34 of 34 executed (2 defects found) |
 | Newman CLI reports | ✅ 41 requests, 87 assertions, 2 failing (documented defects) |
-| REST Assured automation | ⏳ Planned |
+| REST Assured automation | 🚧 In progress (auth tests done, runs in CI) |
+| CI and live reports | ✅ [REST Assured and Newman reports](https://vikneshgs23.github.io/api-automation-portfolio/), updated on every push |
 
 ---
 
@@ -68,11 +73,13 @@ Two assertions fail on purpose: they document real API defects (see Key Findings
 
 📊 [View the latest Newman report](https://vikneshgs23.github.io/api-automation-portfolio/postman/reports/report.html)
 
-### REST Assured *(planned)*
+
+### REST Assured
 ```bash
 cd rest-assured
 mvn clean test
 ```
+📊 [View the latest REST Assured report](https://vikneshgs23.github.io/api-automation-portfolio/rest-assured/emailable-report.html)
 
 ---
 
