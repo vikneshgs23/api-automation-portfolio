@@ -1,0 +1,68 @@
+name: API tests and reports
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Run REST Assured tests
+        working-directory: rest-assured
+        run: mvn --batch-mode clean test
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Build the reports site
+        run: |
+          mkdir -p site/postman/reports site/rest-assured
+          cp -r rest-assured/target/surefire-reports/. site/rest-assured/
+          newman run "postman/Restful-Booker API.postman_collection.json" -e postman/Restful-Booker.postman_environment.json -r "cli,htmlextra" --reporter-htmlextra-export site/postman/reports/report.html --suppress-exit-code
+          cat > site/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>API test reports</title></head>
+          <body><h1>API test reports</h1><ul>
+          <li><a href="rest-assured/emailable-report.html">REST Assured (TestNG) report</a></li>
+          <li><a href="postman/reports/report.html">Newman (Postman) report</a></li>
+          </ul></body></html>
+          EOF
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
