@@ -47,7 +47,7 @@ api-automation-portfolio/
 | Test case design | ✅ 34 test cases written |
 | Postman execution | ✅ 34 of 34 executed (2 defects found) |
 | Newman CLI reports | ✅ 41 requests, 87 assertions, 2 failing (documented defects) |
-| REST Assured automation | 🚧 In progress (10 of 34 test cases automated, runs in CI) |
+| REST Assured automation | 🚧 In progress (14 of 34 test cases automated, runs in CI) |
 | CI and live reports | ✅ [REST Assured and Newman reports](https://vikneshgs23.github.io/api-automation-portfolio/), updated on every push |
 
 ---
