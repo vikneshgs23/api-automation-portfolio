@@ -14,7 +14,7 @@ End-to-end API testing of RESTful services, validating functionality, data integ
 - Postman collection with test scripts and environment variables
 - CRUD lifecycles with dynamic request chaining (token extraction, ID injection)
 - CLI execution and HTML reporting via Newman
-- Java automation framework with REST Assured and TestNG *(in progress)*
+- Java automation framework with REST Assured and TestNG 
 - GitHub Actions runs the tests on every push and publishes HTML reports
 
 ---
