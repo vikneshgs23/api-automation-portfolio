@@ -47,7 +47,7 @@ api-automation-portfolio/
 | Test case design | ✅ 34 test cases written |
 | Postman execution | ✅ 34 of 34 executed (2 defects found) |
 | Newman CLI reports | ✅ 41 requests, 87 assertions, 2 failing (documented defects) |
-| REST Assured automation | 🚧 In progress (14 of 34 test cases automated, runs in CI) |
+| REST Assured automation | ✅ 34 of 34 test cases automated, runs in CI |
 | CI and live reports | ✅ [REST Assured and Newman reports](https://vikneshgs23.github.io/api-automation-portfolio/), updated on every push |
 
 ---
@@ -92,7 +92,7 @@ mvn clean test
 - A successful `DELETE` returns **201 Created** instead of 200 or 204.
 - Restful-Booker is a shared public API and its data is wiped periodically, so tests should create their own data instead of relying on existing bookings.
 - Requests depend on shared state (token, booking ID). In the collection, Auth runs first and a fresh booking is created before the PATCH group, so a Newman run starts from known data.
-
+- In the REST Assured suite, the tests for the two `POST /booking` validation defects (`defect_...`) assert the API's current behaviour, so the pipeline stays green. They will fail when the API is fixed.
 ---
 
 ## 👤 Author
