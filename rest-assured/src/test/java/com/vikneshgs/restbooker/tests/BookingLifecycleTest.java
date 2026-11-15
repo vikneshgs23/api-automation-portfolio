@@ -85,4 +85,33 @@ public class BookingLifecycleTest extends BaseTest {
                 .then()
                 .statusCode(404);
     }
+    // TC_34: the data that was created is the data that is retrieved
+    @Test
+    public void createdDataMatchesRetrievedData() {
+        int id = given()
+                .contentType(ContentType.JSON)
+                .header("Accept", "application/json")
+                .body("""
+                    {"firstname":"Integrity","lastname":"Check","totalprice":750,"depositpaid":false,
+                     "bookingdates":{"checkin":"2026-08-10","checkout":"2026-08-15"},"additionalneeds":"Late checkout"}""")
+                .when()
+                .post("/booking")
+                .then()
+                .statusCode(200)
+                .extract().path("bookingid");
+
+        given()
+                .header("Accept", "application/json")
+                .when()
+                .get("/booking/" + id)
+                .then()
+                .statusCode(200)
+                .body("firstname", equalTo("Integrity"))
+                .body("lastname", equalTo("Check"))
+                .body("totalprice", equalTo(750))
+                .body("depositpaid", equalTo(false))
+                .body("bookingdates.checkin", equalTo("2026-08-10"))
+                .body("bookingdates.checkout", equalTo("2026-08-15"))
+                .body("additionalneeds", equalTo("Late checkout"));
+    }
 }
